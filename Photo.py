@@ -10,7 +10,7 @@ import threading
 import random
 
 from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
-import PhotoHandler
+from PhotoHandler import PhotoHandler
 
 import config
 
