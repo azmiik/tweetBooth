@@ -8,8 +8,8 @@ import subprocess
 from PIL import Image
 import threading
 
-from print_on_screen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
-from photo_handling import PhotoHandler
+from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
+import PhotoHandler
 from string_operations import StringOperations
 
 import config

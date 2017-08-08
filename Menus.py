@@ -56,7 +56,7 @@ class Menus(object):
         self.image_defs = []
 
         # Print the heading on the screen
-        self.textprinter.print_text( [["Welcome to the Photo Booth",
+        self.textprinter.print_text( [["Welcome to the Twitter Booth",
                                        120,
                                        self.heading_font_colour,
                                        "ct",
