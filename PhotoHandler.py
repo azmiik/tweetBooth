@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageChops
 import math
 import threading
 
-from print_on_screen import ImagePrinter
+from PrintOnScreen import ImagePrinter
 
 import config
 
