@@ -7,7 +7,7 @@ import time
 import config
 
 
-from print_on_screen import TextPrinter, ImagePrinter, CursorPrinter, screen_colour_fill
+from PrintOnScreen import TextPrinter, ImagePrinter, CursorPrinter, screen_colour_fill
 
 
 class Menus(object):
