@@ -9,7 +9,7 @@ import threading
 
 import FileHandler
 import ButtonHandler
-from print_on_screen import TextPrinter, ImagePrinter, CursorPrinter, screen_colour_fill
+from PrintOnScreen import TextPrinter, ImagePrinter, CursorPrinter, screen_colour_fill
 
 import config
 
