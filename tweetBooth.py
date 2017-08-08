@@ -6,7 +6,8 @@
 
 import os
 
-import PhotoBooth, Menus
+import PhotoBooth
+import Menus
 from Photo import TwitterPhoto
 
 photobooth = None

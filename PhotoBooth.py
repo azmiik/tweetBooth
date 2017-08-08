@@ -5,11 +5,10 @@ import subprocess
 import RPi.GPIO as GPIO
 import pygame
 import time
-import datetime
 import threading
 
-from file_handling import FileHandler
-from button_handling import ButtonHandler
+import FileHandler
+import ButtonHandler
 from print_on_screen import TextPrinter, ImagePrinter, CursorPrinter, screen_colour_fill
 
 import config
