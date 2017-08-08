@@ -3,63 +3,64 @@
 
 import os
 import time
-import picamera # http://picamera.readthedocs.org/en/release-1.4/install2.html
+import picamera  # http://picamera.readthedocs.org/en/release-1.4/install2.html
 import subprocess
 from PIL import Image
 import threading
+import random
 
 from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
 import PhotoHandler
-from string_operations import StringOperations
 
 import config
+
 
 class PhotoBoothFunction(object):
     'Base class for all the different Photo Booth functions'
 
     # Set up class variables that are common to all photobooth features
-    menu_text    = ""
+    menu_text = ""
     instructions = ""
 
     prep_delay_short = 2
-    prep_delay_long  = 3
-    total_pics       = 1 # Default number of pics to be taken
+    prep_delay_long = 3
+    total_pics = 1  # Default number of pics to be taken
 
-    capture_delay    = 2 # Default delay between pics
+    capture_delay = 2  # Default delay between pics
 
-    photo_width      = 1024
-    screen           = None
+    photo_width = 1024
+    screen = None
 
-    filehandler      = None
-    textprinter      = None
-    imageprinter     = None
-    photohandler     = None
-    buttonhandler    = None
+    filehandler = None
+    textprinter = None
+    imageprinter = None
+    photohandler = None
+    buttonhandler = None
 
-    local_file_dir   = None
+    local_file_dir = None
     local_upload_file_dir = None
-    remote_file_dir  = None
+    remote_file_dir = None
 
-    booth_id         = ""
+    booth_id = ""
 
-    image_extension           = ".jpg"
-    animated_image_extension  = ".gif"
-    photo_file_prefix         = "photobooth"
-    zip_filename              = "photobooth_photos.zip"
+    image_extension = ".jpg"
+    animated_image_extension = ".gif"
+    photo_file_prefix = "photobooth"
+    zip_filename = "photobooth_photos.zip"
 
-    image_defs       = []
+    image_defs = []
 
-    camera           = None
+    camera = None
 
     def __init__(self, photobooth):
-        self.booth_id      = photobooth.get_booth_id()
-        self.screen        = photobooth.get_pygame_screen()
-        self.filehandler   = photobooth.get_file_handler()
+        self.booth_id = photobooth.get_booth_id()
+        self.screen = photobooth.get_pygame_screen()
+        self.filehandler = photobooth.get_file_handler()
         self.buttonhandler = photobooth.get_button_handler()
 
-        self.local_file_dir        = self.filehandler.get_local_file_dir()
+        self.local_file_dir = self.filehandler.get_local_file_dir()
         self.local_upload_file_dir = self.filehandler.get_upload_file_dir()
-        self.remote_file_dir       = self.filehandler.get_remote_file_dir()
+        self.remote_file_dir = self.filehandler.get_remote_file_dir()
 
     def get_menu_text(self):
         return self.menu_text
@@ -76,7 +77,7 @@ class PhotoBoothFunction(object):
 
         # Get hold of the camera
         self.camera = picamera.PiCamera()
-        self.camera.led   = False
+        self.camera.led = False
         self.camera.vflip = True
         self.camera.hflip = False
 
@@ -85,15 +86,16 @@ class PhotoBoothFunction(object):
         if (self.camera is None):
             return
 
-        try: # Take the photos
+        try:  # Take the photos
             self.camera.led = True
-            time.sleep(0.25) # Light the LED for just a bit
+            time.sleep(0.25)  # Light the LED for just a bit
 
             local_file_dir = self.filehandler.get_local_file_dir()
             manipulate_thread_list = []
 
             # Take photos
-            for i, filepath in enumerate(self.camera.capture_continuous(os.path.join(local_file_dir, self.photo_file_prefix + '-' + '{counter:02d}' + self.image_extension))):
+            for i, filepath in enumerate(self.camera.capture_continuous(os.path.join(local_file_dir,
+                                                                                     self.photo_file_prefix + '-' + '{counter:02d}' + self.image_extension))):
                 print('Saving to ' + filepath)
                 self.camera.led = False
 
@@ -102,10 +104,10 @@ class PhotoBoothFunction(object):
                 # Kick off the processing in a separate thread, so as not to delay the photo taking
                 manipulate_thread_list.append(threading.Thread(target=self.manipulate_photo,
                                                                args=(filepath,)))
-                manipulate_thread_list[len(manipulate_thread_list ) -1].start()
+                manipulate_thread_list[len(manipulate_thread_list) - 1].start()
 
                 # If we have finished taking our photos, bail out
-                if i == self. total_pics -1:
+                if i == self.total_pics - 1:
                     break
 
                 # Also provide a way for user to break out, by pressing Left button
@@ -113,16 +115,16 @@ class PhotoBoothFunction(object):
                 if self.buttonhandler.button_is_down(config.button_pin_left):
                     break
 
-                time.sleep(capture_delay) # pause in-between shots
+                time.sleep(capture_delay)  # pause in-between shots
                 self.camera.led = True
-                time.sleep(0.25) # Light the LED for just a bit
+                time.sleep(0.25)  # Light the LED for just a bit
         finally:
             self.camera.stop_preview()
             self.camera.close()
             self.camera = None
 
             # Wait for MainputlatePhoto() calls to end
-            self.textprinter.print_text( [["Please wait ...", 124, config.black_colour, "cm", 0]], 0, False)
+            self.textprinter.print_text([["Please wait ...", 124, config.black_colour, "cm", 0]], 0, False)
             for curr_thread in manipulate_thread_list:
                 curr_thread.join()
 
@@ -133,18 +135,18 @@ class PhotoBoothFunction(object):
             instructions_msg.append([curr_line, 84, config.off_black_colour, "c", 0])
 
         # Print the heading on the screen
-        self.textprinter.print_text( [[self.menu_text,
-                                       84,
-                                       config.blue_colour,
-                                       "ct",
-                                       5]],
-                                     0,
-                                     True )
+        self.textprinter.print_text([[self.menu_text,
+                                      84,
+                                      config.blue_colour,
+                                      "ct",
+                                      5]],
+                                    0,
+                                    True)
 
-        self.textprinter.print_text( instructions_msg, 40, False)
+        self.textprinter.print_text(instructions_msg, 40, False)
 
-        self.imageprinter.print_images([[config.start_overlay_image, 'cb', 0, 0]], False )
-        self.imageprinter.print_images([[config.menu_side_overlay_image, 'lb', 0, 0]], False )
+        self.imageprinter.print_images([[config.start_overlay_image, 'cb', 0, 0]], False)
+        self.imageprinter.print_images([[config.menu_side_overlay_image, 'lb', 0, 0]], False)
 
         # Wait for the user to press the Select button to exit to menu
         choice = ""
@@ -163,7 +165,7 @@ class PhotoBoothFunction(object):
             [config.accept_overlay_image, 'rb', 0, 0]
         ]
 
-        self.imageprinter.print_images( images_to_print, False )
+        self.imageprinter.print_images(images_to_print, False)
 
         while True:
             choice = self.buttonhandler.wait_for_buttons('lr', True)
@@ -175,21 +177,21 @@ class PhotoBoothFunction(object):
 
     def display_rejected_message(self):
         print "Photos rejected"
-        self.textprinter.print_text( [["Photos rejected", 124, config.black_colour, "cm", 0]], 0, True)
+        self.textprinter.print_text([["Photos rejected", 124, config.black_colour, "cm", 0]], 0, True)
         time.sleep(2)
 
     # *** Show user where their photos have been uploaded to ***
     def display_download_url(self, remote_url_prefix, remote_upload_dir):
-        download_url_msg  = [
+        download_url_msg = [
             ["To get your photos, visit:", 84, config.off_black_colour, "c", 0],
             [remote_url_prefix, 84, config.blue_colour, "c", 0],
             ["and enter your photobooth code:", 84, config.off_black_colour, "c", 0],
             [remote_upload_dir, 92, config.blue_colour, "c", 0]
         ]
 
-        self.textprinter.print_text( download_url_msg, 40, True)
+        self.textprinter.print_text(download_url_msg, 40, True)
 
-        self.imageprinter.print_images( [[config.menu_overlay_image, 'cb', 0, 0]], False )
+        self.imageprinter.print_images([[config.menu_overlay_image, 'cb', 0, 0]], False)
 
         # Wait for the user to press the Select button to exit to menu
         while True:
@@ -200,13 +202,13 @@ class PhotoBoothFunction(object):
 
     # *** If the upload threw an exception, apologise to the user ***
     def display_upload_failed_message(self):
-        download_url_msg  = [
+        download_url_msg = [
             ["Upload Failed ... Sorry", 124, config.black_colour, "cm", 0]
         ]
 
-        self.textprinter.print_text( download_url_msg, 40, True)
+        self.textprinter.print_text(download_url_msg, 40, True)
 
-        self.imageprinter.print_images([[config.menu_overlay_image, 'cb', 0, 0]], False )
+        self.imageprinter.print_images([[config.menu_overlay_image, 'cb', 0, 0]], False)
 
         # Wait for the user to press the Select button to exit to menu
         while True:
@@ -376,3 +378,15 @@ class TwitterPhoto(PhotoBoothFunction):
             return remote_upload_dir
         else:
             return None
+
+
+class StringOperations(object):
+    def __init__(self):
+        pass
+
+    def get_random_string(self, str_len):
+        # Miss out easy-to-confuse characters 'lI1O0'
+        chars = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789_-'
+        # chars = string.ascii_letters + string.digits + '_-'
+        result = ''.join(random.choice(chars) for i in range(str_len))
+        return result
