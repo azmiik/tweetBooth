@@ -10,7 +10,9 @@ from PhotoBooth import PhotoBooth
 from Menus import Menus
 from Photo import TwitterPhoto
 
+menus = None
 photobooth = None
+menu_choice = 0
 
 try:
     # Create our main photobooth object
