@@ -55,7 +55,7 @@ class Menus(object):
         self.image_defs = []
 
         # Print the heading on the screen
-        self.textprinter.print_text([["Welcome to the Twitter Booth",
+        self.textprinter.print_text([["Welcome to the Tweet Booth",
                                       120,
                                       self.heading_font_colour,
                                       "ct",
@@ -77,9 +77,7 @@ class Menus(object):
 
         # Print the image overlays onto the screen
         self.image_defs = [
-            [config.go_up_overlay_image, 'lb', 0, 0],
-            [config.go_down_overlay_image, 'rb', 0, 0],
-            [config.select_overlay_image, 'cb', 0, 0]
+
         ]
 
         self.imageprinter.print_images(self.image_defs, False)
