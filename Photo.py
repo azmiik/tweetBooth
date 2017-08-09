@@ -401,7 +401,7 @@ class TwitterPhoto(PhotoBoothFunction):
             return 1
 
         button_overlay = OverlayOnCamera(self.camera)
-        button_overlay.camera_overlay(self.accompany_button_overlay_image)
+        button_overlay.camera_overlay(config.badge_picker_menu_image)
 
         self.overlay_on_camera = OverlayOnCamera(self.camera)
         self.change_accompaniment(files)
