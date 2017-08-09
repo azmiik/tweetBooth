@@ -11,7 +11,6 @@ import random
 
 from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
 from PhotoHandler import PhotoHandler
-from ButtonHandler import ButtonHandler
 
 import config
 
@@ -89,17 +88,17 @@ class PhotoBoothFunction(object):
 
         try:  # Take the photos
             for i in range(3):
-                ButtonHandler.light_button_leds('s',True)
-                sleep(1)
-                ButtonHandler.light_button_leds('s',False)
-                sleep(1)
+                self.buttonhandler.light_button_leds('s', True)
+                time.sleep(1)
+                self.buttonhandler.light_button_leds('s', False)
+                time.sleep(1)
 
             camera.annotate_text = 'Get Ready!'
             for i in range(3):
-                ButtonHandler.light_button_leds('s',True)
-                sleep(.25)
-                ButtonHandler.light_button_leds('s',False)
-                sleep(.25)
+                self.buttonhandler.light_button_leds('s', True)
+                time.sleep(.25)
+                self.buttonhandler.light_button_leds('s', False)
+                time.sleep(.25)
 
             local_file_dir = self.filehandler.get_local_file_dir()
             manipulate_thread_list = []
@@ -108,7 +107,6 @@ class PhotoBoothFunction(object):
             for i, filepath in enumerate(self.camera.capture_continuous(os.path.join(local_file_dir,
                                                                                      self.photo_file_prefix + '-' + '{counter:02d}' + self.image_extension))):
                 print('Saving to ' + filepath)
-                self.camera.led = False
 
                 # Each photobooth function can override manipulate_photo() to process
                 #     the photos before they are saved to disk
@@ -486,7 +484,6 @@ class TwitterPhoto(PhotoBoothFunction):
                 break
 
         return choice
-
 
 
 class StringOperations(object):
