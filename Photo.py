@@ -161,8 +161,7 @@ class PhotoBoothFunction(object):
     def user_accept_photos(self):
         choice = None
         images_to_print = [
-            [config.reject_overlay_image, 'lb', 0, 0],
-            [config.accept_overlay_image, 'rb', 0, 0]
+            [config.accept_menu_image, 'lb', 0, 0],
         ]
 
         self.imageprinter.print_images(images_to_print, False)
@@ -296,7 +295,6 @@ class TwitterPhoto(PhotoBoothFunction):
         self.take_photos()
 
         self.photohandler.show_single_photo(self.image_extension)
-        time.sleep(2)
         choice = self.user_accept_photos()
 
         # See if user wants to accept photos
