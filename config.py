@@ -38,6 +38,8 @@ go_down_overlay_image = os.path.join(images_dir, 'go_down.png')
 start_menu_image = os.path.join(images_dir, 'StartMenu.png')
 instructions_menu_image = os.path.join(images_dir, 'instructionsMenu.png')
 badge_picker_menu_image = os.path.join(images_dir, 'badgePickerMenu.png')
+accept_menu_image = os.path.join(images_dir, 'AcceptMenu.png')
+
 
 select_overlay_image = os.path.join(images_dir, 'select.png')
 exit_overlay_image = os.path.join(images_dir, 'exit.png')

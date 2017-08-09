@@ -204,22 +204,23 @@ class PhotoHandler(object):
         screen_height = pygame.display.Info().current_h
 
         # display_* is the size that we want to display the image at
-        display_height = screen_height // 2
-        display_width = int(float(display_height) / float(image_height) * float(image_width))
+        display_height = 440
+        display_width = 880
 
-        row_1_x = (screen_width - (num_row_1 * display_width)) // 2
-        row_2_x = (screen_width - (num_row_2 * display_width)) // 2
+        image_x = 72
+        image_y = 113
 
-        image_num = 0
+
+        # image_num = 0
         for f in files:
-            image_num = image_num + 1
-
-            if image_num <= num_row_1:
-                image_x = row_1_x + display_width * (image_num - 1)
-                image_y = 0
-            else:
-                image_x = row_2_x + display_width * (image_num - num_row_1 - 1)
-                image_y = display_height
+            # image_num = image_num + 1
+            #
+            # if image_num <= num_row_1:
+            #     image_x = row_1_x + display_width * (image_num - 1)
+            #     image_y = 0
+            # else:
+            #     image_x = row_2_x + display_width * (image_num - num_row_1 - 1)
+            #     image_y = display_height
 
             try:
                 img = pygame.image.load(f)
