@@ -268,7 +268,7 @@ class TwitterPhoto(PhotoBoothFunction):
 
         self.local_file_dir = self.filehandler.get_local_file_dir()
         self.local_upload_file_dir = self.filehandler.get_upload_file_dir()
-        self.remote_file_dir = self.filehandler.get_remote_file_dir()
+        self.local_archive_dir = self.filehandler.get_archive_file_dir()
 
         self.textprinter = TextPrinter(self.screen)
         self.imageprinter = ImagePrinter(self.screen)
