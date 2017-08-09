@@ -13,8 +13,8 @@ except ImportError:
     from pipes import quote as cmd_quote
 
 # Set up the directories etc. to support photo storage and upload
-local_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth/', 'pics')  # path to save PiCamera images to on Pi
-local_upload_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth/', 'pics',
+local_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth', 'pics')  # path to save PiCamera images to on Pi
+local_upload_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth', 'pics',
                                      'upload')  # path to save images to be uploaded
 
 local_archive_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth', 'archive')  # path to store photos
@@ -24,6 +24,7 @@ class FileHandler(object):
     'Basic handling class for file operations'
     global local_file_dir
     global local_upload_file_dir
+    global local_archive_dir
 
     def __init__(self):
         # Ensure photo storage and upload directories exist
