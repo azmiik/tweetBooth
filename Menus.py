@@ -72,8 +72,8 @@ class Menus(object):
                                    self.menu_item_position])
 
         # self.menu_option_rects = self.textprinter.print_text(self.text_defs,
-                                                             self.menu_item_line_spacing,
-                                                             False)
+        #                                                      self.menu_item_line_spacing,
+        #                                                      False)
 
         # Print the image overlays onto the screen
         self.image_defs = [
