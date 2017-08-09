@@ -78,7 +78,7 @@ class PhotoBoothFunction(object):
         # Get hold of the camera
         self.camera = picamera.PiCamera()
         self.camera.led = False
-        self.camera.vflip = True
+        self.camera.vflip = False
         self.camera.hflip = False
 
     # The Parent class's take_photos is barebones - to be called from Child instance
@@ -243,13 +243,13 @@ class PhotoBoothFunction(object):
         self.total_pics = num_pics
 
 
-##########################################
-### Photo function TweetPhoto ###
+#############################################
+### Photo Booth function AccompaniedPhoto ###
 class TwitterPhoto(PhotoBoothFunction):
-    'Class to take picture and post to twitter'
+    'Class to take a photograph with a companion'
 
     def __init__(self, photobooth):
-        self.menu_text = "Tweet Photo"
+        self.menu_text = "Take accompanied photo"
 
         self.booth_id = photobooth.get_booth_id()
         self.screen = photobooth.get_pygame_screen()
@@ -264,10 +264,10 @@ class TwitterPhoto(PhotoBoothFunction):
         self.imageprinter = ImagePrinter(self.screen)
         self.photohandler = PhotoHandler(self.screen, self.filehandler)
 
-        # Set image definitions - width, height, dpi
-        self.image_defs = [
-            ['twitter', 880, 440, 72],
-        ]
+        self.chosen_accompaniment = 0
+        self.accompaniment_dir = self.filehandler.get_full_path(config.images_dir, 'accompany')
+        self.accompany_button_overlay_image = self.filehandler.get_full_path(config.images_dir,
+                                                                             'accompany_button_overlay.png')
 
     def start(self, total_pics=PhotoBoothFunction.total_pics):
         # Take and display photos
@@ -278,8 +278,10 @@ class TwitterPhoto(PhotoBoothFunction):
         if self.total_pics > 1:
             total_pics_msg += "s"
         self.instructions = [
-            "Get Ready, " + total_pics_msg + " will be taken",
-            "buttons below will count down before each picture",
+            "Press Left & Right to change badge",
+            "Press Select button to choose badge",
+            total_pics_msg + " will be taken",
+            "(red light will appear before each photo)",
             "Press the Start button to begin"
         ]
         choice = self.display_instructions()
@@ -311,9 +313,13 @@ class TwitterPhoto(PhotoBoothFunction):
         super(TwitterPhoto, self).take_photos()
 
         ################################# Step 2 - Setup camera #################################
-        # Make the image square, using the photo_width
+        # Collect together the PNG versions of all available accompaniment files
+        file_pattern = self.filehandler.get_full_path(self.accompaniment_dir, "*.png")
+        self.accompaniment_files = self.filehandler.get_sorted_file_list(file_pattern)
+
+        ################################# Step 2 - Setup camera #################################
         pixel_width = self.photo_width
-        pixel_height = self.photo_width / 2
+        pixel_height = self.photohandler.get_aspect_ratio_height(pixel_width)
 
         self.camera.resolution = (pixel_width, pixel_height)
 
@@ -322,23 +328,26 @@ class TwitterPhoto(PhotoBoothFunction):
 
         self.camera.start_preview()
 
-        ################################# Step 4 - Prepare user ################################
-        self.overlay_on_camera = OverlayOnCamera(self.camera)
+        ################################# Step 4 - User make selection ########################
+        self.choose_accompaniment()
 
-        # Apply overlay images & messages to prepare the user
-        self.overlay_on_camera.camera_overlay(config.face_target_overlay_image)
-        time.sleep(self.prep_delay_short)
-        self.overlay_on_camera.camera_overlay(config.face_target_fit_face_overlay_image)
         time.sleep(self.prep_delay_long)
-        self.overlay_on_camera.camera_overlay(config.face_target_overlay_image)
-        time.sleep(self.prep_delay_short)
-        self.overlay_on_camera.camera_overlay(config.face_target_smile_overlay_image)
-        time.sleep(self.prep_delay_long)
-        self.overlay_on_camera.camera_overlay(config.face_target_overlay_image)
-        time.sleep(self.prep_delay_short)
 
         ################################# Step 5 - Take Photos ################################
         self.take_photos_and_close_camera(self.capture_delay)
+
+    def manipulate_photo(self, filepath):
+        # Superimpose the accompanying image onto the captured image
+        # http://effbot.org/imagingbook/image.htm
+        #     super_image is RGBA, so use it both for image and mask
+        if self.chosen_accompaniment > 1 and self.chosen_accompaniment < (len(self.accompaniment_files) + 2):
+            curr_accompaniment_file = self.accompaniment_files[self.chosen_accompaniment - 2]
+            curr_img = Image.open(filepath)
+            super_img = Image.open(curr_accompaniment_file)
+
+            curr_img.paste(super_img, None, super_img)
+
+            curr_img.save(filepath)
 
     def upload_photos(self):
         self.textprinter.print_text([["Uploading photos ...", 124, config.black_colour, "cm", 0]],
@@ -368,12 +377,78 @@ class TwitterPhoto(PhotoBoothFunction):
              os.path.join(self.remote_file_dir, 'common'), 0, True],
         ]
 
-        success = True
+        success = self.upload_photos_using_defs(file_defs)
 
         if success:
             return remote_upload_dir
         else:
             return None
+
+    # Let the user select which image they want to be photographed with
+    def choose_accompaniment(self):
+        # Start with the first image (if there are any)
+        self.chosen_accompaniment = 2
+
+        # Use the JPG versions of accompaniment files, which have black background
+        file_pattern = self.filehandler.get_full_path(self.accompaniment_dir, "*.jpg")
+        files = self.filehandler.get_sorted_file_list(file_pattern)
+
+        # If there are no images, then chosen_accompaniment will be the blank screen
+        if len(files) < 1:
+            return 1
+
+        button_overlay = OverlayOnCamera(self.camera)
+        button_overlay.camera_overlay(self.accompany_button_overlay_image)
+
+        self.overlay_on_camera = OverlayOnCamera(self.camera)
+        self.change_accompaniment(files)
+
+        while True:
+            choice = self.buttonhandler.wait_for_buttons('lsr', False)
+
+            if choice == 'l':
+                if self.chosen_accompaniment > 1:
+                    self.chosen_accompaniment -= 1
+                else:
+                    self.chosen_accompaniment = len(files) + 1
+                self.change_accompaniment(files)
+            if choice == 'r':
+                if self.chosen_accompaniment < (len(files) + 1):
+                    self.chosen_accompaniment += 1
+                else:
+                    self.chosen_accompaniment = 1
+                self.change_accompaniment(files)
+            if choice == 's':
+                self.buttonhandler.light_button_leds('lsr', False)
+                break
+
+        button_overlay.remove_camera_overlay()
+
+    def change_accompaniment(self, files):
+        self.camera.saturation = 0
+
+        # We leave a blank space for chosen_accompaniment == 1
+        accompanying_file_num = self.chosen_accompaniment - 2
+
+        # If chosen_accompaniment == 1, then we don't want any images overlaid
+        if accompanying_file_num < 0 or accompanying_file_num > (len(files) - 1):
+            self.overlay_on_camera.remove_camera_overlay()
+            return
+
+        curr_accompaniment_file = files[accompanying_file_num]
+        self.overlay_on_camera.camera_overlay(curr_accompaniment_file)
+
+        # See if an opacity value in the filename [within square brackets]
+        filename = os.path.basename(curr_accompaniment_file)
+        opacity = filename[filename.find("[") + 1:filename.find("]")]
+
+        if len(opacity) > 0:
+            opacity = int(opacity)
+            if opacity < -100:
+                opacity = -100
+            if opacity > 100:
+                opacity = 100
+            self.camera.saturation = opacity
 
 
 class StringOperations(object):
