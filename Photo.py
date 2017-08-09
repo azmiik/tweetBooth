@@ -11,6 +11,7 @@ import random
 
 from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
 from PhotoHandler import PhotoHandler
+from ButtonHandler import ButtonHandler
 
 import config
 
@@ -87,8 +88,18 @@ class PhotoBoothFunction(object):
             return
 
         try:  # Take the photos
-            self.camera.led = True
-            time.sleep(0.25)  # Light the LED for just a bit
+            for i in range(3):
+                ButtonHandler.light_button_leds('s',True)
+                sleep(1)
+                ButtonHandler.light_button_leds('s',False)
+                sleep(1)
+
+            camera.annotate_text = 'Get Ready!'
+            for i in range(3):
+                ButtonHandler.light_button_leds('s',True)
+                sleep(.25)
+                ButtonHandler.light_button_leds('s',False)
+                sleep(.25)
 
             local_file_dir = self.filehandler.get_local_file_dir()
             manipulate_thread_list = []
