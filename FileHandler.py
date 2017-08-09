@@ -6,11 +6,20 @@ import subprocess
 import glob
 import zipfile
 
+from twython import Twython
+
 # Thanks http://stackoverflow.com/questions/26790916/python-3-backward-compatability-shlex-quote-vs-pipes-quote
 try:
     from shlex import quote as cmd_quote
 except ImportError:
     from pipes import quote as cmd_quote
+
+from auth import (
+    consumer_key,
+    consumer_secret,
+    access_token,
+    access_token_secret
+)
 
 # Set up the directories etc. to support photo storage and upload
 local_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth', 'pics')  # path to save PiCamera images to on Pi
@@ -74,7 +83,6 @@ class FileHandler(object):
 
     def get_archive_file_dir(self):
         return local_archive_dir
-
 
     def get_full_path(self, prefix, postfix):
         return os.path.join(prefix, postfix)
@@ -168,17 +176,26 @@ class FileHandler(object):
     def tweet_file(self):
         print "Tweeting file..."
 
+        twitter = Twython(
+            consumer_key,
+            consumer_secret,
+            access_token,
+            access_token_secret
+        )
+
+        message = 'Test a Roo!!!'
+
         # Get directories
         image_dir = self.get_local_file_dir()
 
         # PiCamera captures images at 72 pixels/inch.
 
         # Collect a list of the original PiCamera-saved files
-        file_pattern = os.path.join(image_dir, "photobooth*" + image_extension)
+        file_pattern = os.path.join(image_dir, "twitterBooth*.jpg")
         files = self.get_sorted_file_list(file_pattern)
 
-
         for curr_img in files:
-            print curr_img
+            with open(curr_img, 'rb') as photo:
+                twitter.update_status_with_media(status=message, media=photo)
 
         print "... Tweet finished."
