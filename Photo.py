@@ -177,7 +177,7 @@ class PhotoBoothFunction(object):
 
     def display_rejected_message(self):
         print "Photo Deleted"
-        self.textprinter.print_text([["Photos Deleted", 124, config.black_colour, "cm", 0]], 0, True)
+        self.textprinter.print_text([["Photo Deleted", 124, config.black_colour, "cm", 0]], 0, True)
         time.sleep(2)
 
     def display_success_message(self):
@@ -290,8 +290,6 @@ class TwitterPhoto(PhotoBoothFunction):
         self.instructions = [
             "Press Left & Right to change badge",
             "Press Select button to choose badge",
-            total_pics_msg + " will be taken",
-            "(red light will appear before each photo)",
             "Press the Start button to begin"
         ]
         choice = self.display_instructions()
@@ -308,7 +306,7 @@ class TwitterPhoto(PhotoBoothFunction):
         # See if user wants to accept photos
         if (choice == 'r'):
             self.process_photos()
-            tweet_photo = self.upload_photos()
+            tweet_photo = self.tweet_photo()
 
             if tweet_photo:
                 self.display_success_message()
