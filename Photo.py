@@ -24,7 +24,7 @@ class PhotoBoothFunction(object):
 
     prep_delay_short = 2
     prep_delay_long = 3
-    total_pics = 1  # Default number of pics to be taken
+    total_pics = 4  # Default number of pics to be taken
 
     capture_delay = 2  # Default delay between pics
 
@@ -266,10 +266,7 @@ class TwitterPhoto(PhotoBoothFunction):
 
         # Set image definitions - width, height, dpi
         self.image_defs = [
-            ['learn', 150, 150, 300],
-            ['pure', 160, 185, 300],
-            ['eevec', 100, 150, 300],
-            ['office365', 300, 300, 300]
+            ['twitter', 880, 440, 72],
         ]
 
     def start(self, total_pics=PhotoBoothFunction.total_pics):

@@ -93,15 +93,8 @@ class Menus(object):
         # self.cursorprinter.print_cursor(self.menu_option_rects, self.menu_choice)
 
         while True:
-            self.button = self.buttonhandler.wait_for_buttons('lsr', False)
-            if self.button == 'l':
-                if self.menu_choice > 0:
-                    self.menu_choice -= 1
-                    self.cursorprinter.print_cursor(self.menu_option_rects, self.menu_choice)
-            if self.button == 'r':
-                if self.menu_choice < len(self.menu_option_rects) - 1:
-                    self.menu_choice += 1
-                    self.cursorprinter.print_cursor(self.menu_option_rects, self.menu_choice)
+            self.button = self.buttonhandler.wait_for_buttons('s', False)
+
             if self.button == 's':
                 self.buttonhandler.light_button_leds('lsr', False)
                 break
