@@ -165,3 +165,20 @@ class FileHandler(object):
 
         print "... upload finished."
 
+    def tweet_file(self):
+        print "Tweeting file..."
+
+        # Get directories
+        image_dir = self.filehandler.get_local_file_dir()
+
+        # PiCamera captures images at 72 pixels/inch.
+
+        # Collect a list of the original PiCamera-saved files
+        file_pattern = os.path.join(image_dir, "photobooth*" + image_extension)
+        files = self.filehandler.get_sorted_file_list(file_pattern)
+
+
+        for curr_img in files:
+            print curr_img
+
+        print "... Tweet finished."

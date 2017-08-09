@@ -39,13 +39,13 @@ class PhotoBoothFunction(object):
 
     local_file_dir = None
     local_upload_file_dir = None
-    remote_file_dir = None
+    local_archive_dir = None
 
     booth_id = ""
 
     image_extension = ".jpg"
     animated_image_extension = ".gif"
-    photo_file_prefix = "photobooth"
+    photo_file_prefix = "twitterBooth"
     zip_filename = "photobooth_photos.zip"
 
     image_defs = []
@@ -232,7 +232,7 @@ class PhotoBoothFunction(object):
         pass
 
     def process_photos(self):
-        self.textprinter.print_text([["Processing photos ...", 124, config.black_colour, "cb", 25]],
+        self.textprinter.print_text([["Processing photos ...", 48, config.black_colour, "cb", 25]],
                                     0, True)
         self.photohandler.prepare_images(self.image_extension, self.image_defs, True)
         self.filehandler.zip_images(self.image_extension, self.zip_filename)
