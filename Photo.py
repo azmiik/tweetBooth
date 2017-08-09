@@ -287,11 +287,7 @@ class TwitterPhoto(PhotoBoothFunction):
         total_pics_msg = str(self.total_pics) + " photo"
         if self.total_pics > 1:
             total_pics_msg += "s"
-        self.instructions = [
-            "Press Left & Right to change badge",
-            "Press Select button to choose badge",
-            "Press the Start button to begin"
-        ]
+        self.instructions = []
         choice = self.display_instructions()
         # If the user selected Exit, bail out
         if choice == "l":
@@ -463,6 +459,25 @@ class TwitterPhoto(PhotoBoothFunction):
         self.filehandler.tweet_file()
 
         return True
+
+    # *** Display the instruction screen for the current photobooth function ***
+    def display_instructions(self):
+        instructions_msg = []
+        for curr_line in self.instructions:
+            instructions_msg.append([curr_line, 84, config.off_black_colour, "c", 0])
+
+        self.imageprinter.print_images([[config.instructions_menu_image, 'cb', 0, 0]], False)
+
+        # Wait for the user to press the Select button to exit to menu
+        choice = ""
+        while True:
+            choice = self.buttonhandler.wait_for_buttons('ls', True)
+
+            if (choice != 'screensaver'):
+                break
+
+        return choice
+
 
 
 class StringOperations(object):
