@@ -319,7 +319,7 @@ class TwitterPhoto(PhotoBoothFunction):
 
         ################################# Step 2 - Setup camera #################################
         pixel_width = self.photo_width
-        pixel_height = self.photohandler.get_aspect_ratio_height(pixel_width)
+        pixel_height = self.photo_width / 2
 
         self.camera.resolution = (pixel_width, pixel_height)
 
