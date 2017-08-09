@@ -75,7 +75,7 @@ class PhotoHandler(object):
         # (TODO: Threading doesn't seem to process the images any quicker)
         processing_thread_list = []
 
-        self.imageprinter.print_images([[files[0], "ct", 20, 60]], False)
+        self.imageprinter.print_images([[files[0], "ct", 20, 50]], False)
 
         for curr_img in files:
             processing_thread_list.append(threading.Thread(target=self.prepare_one_image,
