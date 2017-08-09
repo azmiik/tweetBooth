@@ -5,7 +5,6 @@ import os
 import subprocess
 import glob
 import zipfile
-import zlib
 
 # Thanks http://stackoverflow.com/questions/26790916/python-3-backward-compatability-shlex-quote-vs-pipes-quote
 try:
@@ -14,23 +13,17 @@ except ImportError:
     from pipes import quote as cmd_quote
 
 # Set up the directories etc. to support photo storage and upload
-local_file_dir = os.path.join(os.sep, 'home', 'pi', 'photobooth', 'pics')  # path to save PiCamera images to on Pi
-local_upload_file_dir = os.path.join(os.sep, 'home', 'pi', 'photobooth', 'pics',
+local_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth/', 'pics')  # path to save PiCamera images to on Pi
+local_upload_file_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth/', 'pics',
                                      'upload')  # path to save images to be uploaded
 
-# Web server used for the photobooth
-remote_account = 'photobooth@somedomain.org.uk'  # the username and host of the remote server
-remote_file_dir = 'public_html'  # path to upload images to on web server
-remote_url_prefix = 'www.somedomain.org.uk'  # the public website URL to the above remote_file_dir
+local_archive_dir = os.path.join(os.sep, 'home', 'pi', 'tweetBooth', 'archive')  # path to store photos
 
 
 class FileHandler(object):
     'Basic handling class for file operations'
     global local_file_dir
     global local_upload_file_dir
-    global remote_account
-    global remote_file_dir
-    global remote_url_prefix
 
     def __init__(self):
         # Ensure photo storage and upload directories exist
@@ -42,6 +35,10 @@ class FileHandler(object):
 
             # Ensure the 'pics' directory exists
             subprocess.check_call(["mkdir", "-p", local_file_dir])
+
+            subprocess.check_call(["mkdir", "-p", local_archive_dir])
+
+
         except subprocess.CalledProcessError as e:
             print "Error making local directories: ", e.returncode
             raise
@@ -74,11 +71,9 @@ class FileHandler(object):
     def get_upload_file_dir(self):
         return local_upload_file_dir
 
-    def get_remote_file_dir(self):
-        return remote_file_dir
+    def get_archive_file_dir(self):
+        return local_archive_dir
 
-    def get_remote_url_prefix(self):
-        return remote_url_prefix
 
     def get_full_path(self, prefix, postfix):
         return os.path.join(prefix, postfix)
@@ -86,7 +81,6 @@ class FileHandler(object):
     def get_sorted_file_list(self, filepath_pattern):
         return sorted(glob.glob(filepath_pattern))
 
-    # *** Zip the images up, ready for upload
     # *** Zip the images up, ready for upload
     def zip_images(self, image_extension, zip_filename):
         print "Zipping files ..."
@@ -169,3 +163,4 @@ class FileHandler(object):
                 raise
 
         print "... upload finished."
+

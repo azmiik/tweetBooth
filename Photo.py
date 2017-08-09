@@ -24,7 +24,7 @@ class PhotoBoothFunction(object):
 
     prep_delay_short = 2
     prep_delay_long = 3
-    total_pics = 4  # Default number of pics to be taken
+    total_pics = 1  # Default number of pics to be taken
 
     capture_delay = 2  # Default delay between pics
 
@@ -136,7 +136,7 @@ class PhotoBoothFunction(object):
 
         # Print the heading on the screen
         self.textprinter.print_text([[self.menu_text,
-                                      84,
+                                      48,
                                       config.blue_colour,
                                       "ct",
                                       5]],
@@ -176,8 +176,18 @@ class PhotoBoothFunction(object):
         return choice
 
     def display_rejected_message(self):
-        print "Photos rejected"
-        self.textprinter.print_text([["Photos rejected", 124, config.black_colour, "cm", 0]], 0, True)
+        print "Photo Deleted"
+        self.textprinter.print_text([["Photos Deleted", 124, config.black_colour, "cm", 0]], 0, True)
+        time.sleep(2)
+
+    def display_success_message(self):
+        print "Photo Tweeted"
+        self.textprinter.print_text([["Photo Tweeted #CVconference", 124, config.black_colour, "cm", 0]], 0, True)
+        time.sleep(2)
+
+    def display_error_message(self):
+        print "Error with Tweet"
+        self.textprinter.print_text([["Oops, please try again", 124, config.black_colour, "cm", 0]], 0, True)
         time.sleep(2)
 
     # *** Show user where their photos have been uploaded to ***
@@ -249,7 +259,7 @@ class TwitterPhoto(PhotoBoothFunction):
     'Class to take a photograph with a companion'
 
     def __init__(self, photobooth):
-        self.menu_text = "Take accompanied photo"
+        self.menu_text = "Post Photo to Twitter"
 
         self.booth_id = photobooth.get_booth_id()
         self.screen = photobooth.get_pygame_screen()
@@ -298,13 +308,12 @@ class TwitterPhoto(PhotoBoothFunction):
         # See if user wants to accept photos
         if (choice == 'r'):
             self.process_photos()
-            remote_upload_dir = self.upload_photos()
+            tweet_photo = self.upload_photos()
 
-            if remote_upload_dir is None:
-                self.display_upload_failed_message()
+            if tweet_photo:
+                self.display_success_message()
             else:
-                remote_url_prefix = self.filehandler.get_remote_url_prefix()
-                self.display_download_url(remote_url_prefix, remote_upload_dir)
+                self.display_error_message()
         else:
             self.display_rejected_message()
 
@@ -441,6 +450,7 @@ class TwitterPhoto(PhotoBoothFunction):
         # See if an opacity value in the filename [within square brackets]
         filename = os.path.basename(curr_accompaniment_file)
         opacity = filename[filename.find("[") + 1:filename.find("]")]
+        print opacity
 
         if len(opacity) > 0:
             opacity = int(opacity)
@@ -449,6 +459,14 @@ class TwitterPhoto(PhotoBoothFunction):
             if opacity > 100:
                 opacity = 100
             self.camera.saturation = opacity
+
+    def tweet_photo(self):
+        self.textprinter.print_text([["Uploading photos ...", 124, config.black_colour, "cm", 0]],
+                                    0, True)
+
+        print os.path.join(self.local_file_dir, '*' + self.image_extension), 'photobooth_photo'
+
+        return True
 
 
 class StringOperations(object):

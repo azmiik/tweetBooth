@@ -21,6 +21,10 @@ blue_colour      = (40, 70, 200)
 # Set the screen saver constants
 screen_saver_seconds = 300
 
+# Paths for photo storage
+
+
+
 # Set up the file paths of overlay images
 images_dir                = 'images'
 face_target_overlay_image = os.path.join(images_dir, 'face_overlay_fill.png')
