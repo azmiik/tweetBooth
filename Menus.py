@@ -56,7 +56,7 @@ class Menus(object):
 
         # Print the heading on the screen
         self.textprinter.print_text([["Welcome to the Tweet Booth",
-                                      120,
+                                      60,
                                       self.heading_font_colour,
                                       "ct",
                                       5]],
@@ -71,25 +71,26 @@ class Menus(object):
                                    self.menu_item_alignment,
                                    self.menu_item_position])
 
-        self.menu_option_rects = self.textprinter.print_text(self.text_defs,
+        # self.menu_option_rects = self.textprinter.print_text(self.text_defs,
                                                              self.menu_item_line_spacing,
                                                              False)
 
         # Print the image overlays onto the screen
         self.image_defs = [
 
+            [config.select_overlay_image, 'cb', 0, 0]
         ]
 
         self.imageprinter.print_images(self.image_defs, False)
 
     def get_main_menu_selection(self):
-        self.cursorprinter = CursorPrinter(self.screen, self.menu_cursor_font_size,
-                                           self.menu_cursor_font_colour)
+        # self.cursorprinter = CursorPrinter(self.screen, self.menu_cursor_font_size,
+        #                                    self.menu_cursor_font_colour)
 
         self.menu_choice = 0
 
         # Print the initial cursor at the first menu option
-        self.cursorprinter.print_cursor(self.menu_option_rects, self.menu_choice)
+        # self.cursorprinter.print_cursor(self.menu_option_rects, self.menu_choice)
 
         while True:
             self.button = self.buttonhandler.wait_for_buttons('lsr', False)
