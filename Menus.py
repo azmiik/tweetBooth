@@ -78,7 +78,7 @@ class Menus(object):
         # Print the image overlays onto the screen
         self.image_defs = [
 
-            [config.select_overlay_image, 'cb', 0, 0]
+            [config.start_menu_image, 'cb', 0, 0]
         ]
 
         self.imageprinter.print_images(self.image_defs, False)
