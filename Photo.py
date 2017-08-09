@@ -28,7 +28,7 @@ class PhotoBoothFunction(object):
 
     capture_delay = 2  # Default delay between pics
 
-    photo_width = 1024
+    photo_width = 880
     screen = None
 
     filehandler = None
@@ -278,9 +278,8 @@ class TwitterPhoto(PhotoBoothFunction):
         if self.total_pics > 1:
             total_pics_msg += "s"
         self.instructions = [
-            "A template will appear on screen",
-            "Following that, " + total_pics_msg + " will be taken",
-            "(red light will appear before each photo)",
+            "Get Ready, " + total_pics_msg + " will be taken",
+            "buttons below will count down before each picture",
             "Press the Start button to begin"
         ]
         choice = self.display_instructions()
@@ -309,12 +308,12 @@ class TwitterPhoto(PhotoBoothFunction):
 
     def take_photos(self):
         ################################# Step 1 - Initial Preparation ##########################
-        super(OfficialPhoto, self).take_photos()
+        super(TwitterPhoto, self).take_photos()
 
         ################################# Step 2 - Setup camera #################################
         # Make the image square, using the photo_width
         pixel_width = self.photo_width
-        pixel_height = self.photo_width
+        pixel_height = self.photo_width / 2
 
         self.camera.resolution = (pixel_width, pixel_height)
 
@@ -369,7 +368,7 @@ class TwitterPhoto(PhotoBoothFunction):
              os.path.join(self.remote_file_dir, 'common'), 0, True],
         ]
 
-        success = self.upload_photos_using_defs(file_defs)
+        success = True
 
         if success:
             return remote_upload_dir
