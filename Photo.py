@@ -459,10 +459,7 @@ class TwitterPhoto(PhotoBoothFunction):
             self.camera.saturation = opacity
 
     def tweet_photo(self):
-
-
-        print os.path.join(self.local_file_dir, '*' + self.image_extension), 'photobooth_photo'
-
+        print 'I am making it this far'
         return True
 
 
