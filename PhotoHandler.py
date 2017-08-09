@@ -65,7 +65,7 @@ class PhotoHandler(object):
         # Get directories
         image_dir = self.filehandler.get_local_file_dir()
 
-        # PiCamera captures imsages at 72 pixels/inch.
+        # PiCamera captures images at 72 pixels/inch.
 
         # Collect a list of the original PiCamera-saved files
         file_pattern = os.path.join(image_dir, "photobooth*" + image_extension)
