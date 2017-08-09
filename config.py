@@ -6,8 +6,8 @@ import os
 # Set up variables to reference the GPIO pins we will use
 led_pin_select = 16
 button_pin_select = 20
-led_pin_left = 18
-button_pin_left = 23
+led_pin_left = 23
+button_pin_left = 18
 led_pin_right = 17
 button_pin_right = 27
 button_pin_exit = 5
