@@ -446,17 +446,17 @@ class TwitterPhoto(PhotoBoothFunction):
         self.overlay_on_camera.camera_overlay(curr_accompaniment_file)
 
         # See if an opacity value in the filename [within square brackets]
-        filename = os.path.basename(curr_accompaniment_file)
-        opacity = filename[filename.find("[") + 1:filename.find("]")]
-        print opacity
-
-        if len(opacity) > 0:
-            opacity = int(opacity)
-            if opacity < -100:
-                opacity = -100
-            if opacity > 100:
-                opacity = 100
-            self.camera.saturation = opacity
+        # filename = os.path.basename(curr_accompaniment_file)
+        # opacity = filename[filename.find("[") + 1:filename.find("]")]
+        # print opacity
+        #
+        # if len(opacity) > 0:
+        #     opacity = int(opacity)
+        #     if opacity < -100:
+        #         opacity = -100
+        #     if opacity > 100:
+        #         opacity = 100
+        #     self.camera.saturation = opacity
 
     def tweet_photo(self):
         print 'I am making it this far'
