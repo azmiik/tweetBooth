@@ -1,5 +1,7 @@
 import RPi.GPIO as GPIO
 
+GPIO.setmode(GPIO.BCM)
+
 GPIO.setup(16, GPIO.IN)
 GPIO.setup(20, GPIO.IN)
 GPIO.setup(23, GPIO.IN)
