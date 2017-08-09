@@ -77,14 +77,14 @@ class PhotoHandler(object):
 
         self.imageprinter.print_images([[files[0], "ct", 10, 50]], False)
 
-        for curr_img in files:
-            processing_thread_list.append(threading.Thread(target=self.prepare_one_image,
-                                                           args=(curr_img, image_defs, copy_origs)))
-            processing_thread_list[len(processing_thread_list) - 1].start()
-
-        # Wait for all processing threads to finish
-        for curr_thread in processing_thread_list:
-            curr_thread.join()
+        # for curr_img in files:
+        #     processing_thread_list.append(threading.Thread(target=self.prepare_one_image,
+        #                                                    args=(curr_img, image_defs, copy_origs)))
+        #     processing_thread_list[len(processing_thread_list) - 1].start()
+        #
+        # # Wait for all processing threads to finish
+        # for curr_thread in processing_thread_list:
+        #     curr_thread.join()
 
     def prepare_one_image(self, image_file, image_defs, copy_origs):
         upload_dir = self.filehandler.get_upload_file_dir()
