@@ -295,7 +295,7 @@ class TwitterPhoto(PhotoBoothFunction):
 
         self.take_photos()
 
-        self.photohandler.show_photos_tiled(self.image_extension)
+        self.photohandler.show_single_photo(self.image_extension)
         time.sleep(2)
         choice = self.user_accept_photos()
 

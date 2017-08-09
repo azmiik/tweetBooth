@@ -175,3 +175,58 @@ class PhotoHandler(object):
                 print "ERROR: Image " + os.path.basename(f) + " failed to load: " + message
 
         pygame.display.flip()
+
+    # *** Display the captured images on the PyGame screen ***
+    def show_single_photo(self, image_extension):
+
+        # Get directories
+        image_dir = self.filehandler.get_local_file_dir()
+
+        file_pattern = os.path.join(image_dir, "*" + image_extension)
+        files = self.filehandler.get_sorted_file_list(file_pattern)
+
+        num_images = len(files)
+
+        print "Number of images: %r" % num_images
+
+        if num_images < 1:
+            self.show_photos_tiled(image_extension)
+            return
+
+        # Find the aspect ratio of the images, for later use
+        img = Image.open(files[0])
+        image_width, image_height = img.size
+
+        num_row_1 = num_images // 2  # Note: given an odd number of images, fewer will appear on top row
+        num_row_2 = num_images - num_row_1
+
+        screen_width = pygame.display.Info().current_w
+        screen_height = pygame.display.Info().current_h
+
+        # display_* is the size that we want to display the image at
+        display_height = screen_height // 2
+        display_width = int(float(display_height) / float(image_height) * float(image_width))
+
+        row_1_x = (screen_width - (num_row_1 * display_width)) // 2
+        row_2_x = (screen_width - (num_row_2 * display_width)) // 2
+
+        image_num = 0
+        for f in files:
+            image_num = image_num + 1
+
+            if image_num <= num_row_1:
+                image_x = row_1_x + display_width * (image_num - 1)
+                image_y = 0
+            else:
+                image_x = row_2_x + display_width * (image_num - num_row_1 - 1)
+                image_y = display_height
+
+            try:
+                img = pygame.image.load(f)
+                img = pygame.transform.scale(img, (display_width, display_height))
+                self.screen.blit(img, (image_x, image_y))
+            except pygame.error, message:
+                print "ERROR: Image " + os.path.basename(f) + " failed to load: " + message
+
+        pygame.display.flip()
+
