@@ -87,21 +87,21 @@ class PhotoBoothFunction(object):
             return
 
         try:  # Take the photos
-            for i in range(3):
-                self.buttonhandler.light_button_leds('s', True)
-                time.sleep(1)
-                self.buttonhandler.light_button_leds('s', False)
-                time.sleep(1)
-
-            camera.annotate_text = 'Get Ready!'
-            for i in range(3):
-                self.buttonhandler.light_button_leds('s', True)
-                time.sleep(.25)
-                self.buttonhandler.light_button_leds('s', False)
-                time.sleep(.25)
 
             local_file_dir = self.filehandler.get_local_file_dir()
             manipulate_thread_list = []
+
+            for i in range(3):
+                self.buttonhandler.light_button_leds('s', True)
+                time.sleep(1)
+                self.buttonhandler.light_button_leds('s', False)
+                time.sleep(1)
+
+            for i in range(3):
+                self.buttonhandler.light_button_leds('s', True)
+                time.sleep(.25)
+                self.buttonhandler.light_button_leds('s', False)
+                time.sleep(.25)
 
             # Take photos
             for i, filepath in enumerate(self.camera.capture_continuous(os.path.join(local_file_dir,
