@@ -109,7 +109,7 @@ class Menus(object):
                     time.sleep(0.2)
                     # If the exit button is held down for longer than 3 seconds
                     # then record a 'long exit button press'
-                    if time.time() - self.start_time > 4:
+                    if time.time() - self.start_time > 3
                         self.menu_chcice = -1  # -2 indicates a long exit button press
                         break
 
