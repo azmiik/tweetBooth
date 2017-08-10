@@ -190,12 +190,12 @@ class PhotoBoothFunction(object):
 
     def display_success_message(self):
         print "Photo Tweeted"
-        self.textprinter.print_text([["Photo Tweeted #CVconference", 124, config.black_colour, "cm", 0]], 0, True)
+        self.textprinter.print_text([["Photo Tweeted #CVconference", 64, config.black_colour, "cm", 0]], 0, True)
         time.sleep(2)
 
     def display_error_message(self):
         print "Error with Tweet"
-        self.textprinter.print_text([["Oops, please try again", 124, config.black_colour, "cm", 0]], 0, True)
+        self.textprinter.print_text([["Oops, please try again", 64, config.black_colour, "cm", 0]], 0, True)
         time.sleep(2)
 
     # *** Show user where their photos have been uploaded to ***
@@ -240,7 +240,7 @@ class PhotoBoothFunction(object):
         pass
 
     def process_photos(self):
-        self.textprinter.print_text([["Processing photos ...", 48, config.black_colour, "cb", 25]],
+        self.textprinter.print_text([["Tweeting photo...", 48, config.black_colour, "cb", 25]],
                                     0, True)
         self.photohandler.prepare_images(self.image_extension, self.image_defs, True)
         self.filehandler.zip_images(self.image_extension, self.zip_filename)
