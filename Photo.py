@@ -341,7 +341,7 @@ class TwitterPhoto(PhotoBoothFunction):
         ################################# Step 4 - User make selection ########################
         self.choose_accompaniment()
 
-        time.sleep(self.prep_delay_long)
+        # time.sleep(self.prep_delay_long)
 
         ################################# Step 5 - Take Photos ################################
         self.take_photos_and_close_camera(self.capture_delay)

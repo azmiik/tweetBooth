@@ -7,6 +7,7 @@ import glob
 import zipfile
 
 from twython import Twython
+from datetime import datetime
 
 # Thanks http://stackoverflow.com/questions/26790916/python-3-backward-compatability-shlex-quote-vs-pipes-quote
 try:
@@ -183,7 +184,7 @@ class FileHandler(object):
             access_token_secret
         )
 
-        message = 'Test a Roo!!!'
+        message = '#CVconference'
 
         # Get directories
         image_dir = self.get_local_file_dir()
@@ -197,5 +198,8 @@ class FileHandler(object):
         for curr_img in files:
             with open(curr_img, 'rb') as photo:
                 twitter.update_status_with_media(status=message, media=photo)
+
+            self.copy_file(curr_img,local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
+
 
         print "... Tweet finished."
