@@ -96,7 +96,7 @@ class Menus(object):
             self.button = self.buttonhandler.wait_for_buttons('s', False)
 
             if self.button == 's':
-                self.buttonhandler.lightc_button_leds('lsr', False)
+                self.buttonhandler.light_button_leds('lsr', False)
                 break
 
             if self.button == 'exit':
