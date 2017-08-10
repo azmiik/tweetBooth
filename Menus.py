@@ -96,7 +96,7 @@ class Menus(object):
             self.button = self.buttonhandler.wait_for_buttons('s', False)
 
             if self.button == 's':
-                self.buttonhandler.light_button_leds('lsr', False)
+                self.buttonhandler.lightc_button_leds('lsr', False)
                 break
 
             if self.button == 'exit':
@@ -104,13 +104,13 @@ class Menus(object):
                 self.start_time = time.time()
                 time.sleep(0.2)
 
-                self.menu_choice = -1  # -1 indicates a short exit button
+                self.menu_choice = -2  # -1 indicates a short exit button
                 while self.buttonhandler.button_is_down(config.button_pin_exit):
                     time.sleep(0.2)
                     # If the exit button is held down for longer than 3 seconds
                     # then record a 'long exit button press'
-                    if time.time() - self.start_time > 3:
-                        self.menu_choice = -2  # -2 indicates a long exit button press
+                    if time.time() - self.start_time > 4:
+                        self.menu_chcice = -1  # -2 indicates a long exit button press
                         break
 
                 break
