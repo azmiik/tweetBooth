@@ -20,12 +20,14 @@ GPIO.setup(led_pin_left, GPIO.OUT)  # The 'Left' button LED
 GPIO.setup(led_pin_right, GPIO.OUT)  # The 'Right' button LED
 
 for i in range(10):
+    print "On"
     GPIO.output(led_pin_select, GPIO.HIGH)
     GPIO.output(led_pin_left, GPIO.HIGH)
     GPIO.output(led_pin_right, GPIO.HIGH)
 
     time.sleep(1)
 
+    print "Off"
     GPIO.output(led_pin_select, GPIO.LOW)
     GPIO.output(led_pin_left, GPIO.LOW)
     GPIO.output(led_pin_right, GPIO.LOW)
