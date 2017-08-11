@@ -9,6 +9,7 @@ from PIL import Image
 import threading
 import random
 
+from twython import TwythonError
 from PrintOnScreen import OverlayOnCamera, TextPrinter, ImagePrinter, screen_colour_fill
 from PhotoHandler import PhotoHandler
 
@@ -463,7 +464,11 @@ class TwitterPhoto(PhotoBoothFunction):
 
     def tweet_photo(self):
 
-        self.filehandler.tweet_file()
+        try:
+            self.filehandler.tweet_file()
+
+        except TwythonError as e:
+            return False
 
         return True
 

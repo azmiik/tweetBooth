@@ -7,6 +7,7 @@ import glob
 import zipfile
 
 from twython import Twython
+from twython import TwythonError
 from datetime import datetime
 
 # Thanks http://stackoverflow.com/questions/26790916/python-3-backward-compatability-shlex-quote-vs-pipes-quote
@@ -175,31 +176,38 @@ class FileHandler(object):
         print "... upload finished."
 
     def tweet_file(self):
-        print "Tweeting file..."
 
-        twitter = Twython(
-            consumer_key,
-            consumer_secret,
-            access_token,
-            access_token_secret
-        )
+        try:
+            success = True
 
-        message = '#CVconference'
+            twitter = Twython(
+                consumer_key,
+                consumer_secret,
+                access_token,
+                access_token_secret
+            )
 
-        # Get directories
-        image_dir = self.get_local_file_dir()
+            message = '#CVconference'
 
-        # PiCamera captures images at 72 pixels/inch.
+            # Get directories
+            image_dir = self.get_local_file_dir()
 
-        # Collect a list of the original PiCamera-saved files
-        file_pattern = os.path.join(image_dir, "twitterBooth*.jpg")
-        files = self.get_sorted_file_list(file_pattern)
+            # PiCamera captures images at 72 pixels/inch.
 
-        for curr_img in files:
-            with open(curr_img, 'rb') as photo:
-                twitter.update_status_with_media(status=message, media=photo)
+            # Collect a list of the original PiCamera-saved files
+            file_pattern = os.path.join(image_dir, "twitterBooth*.jpg")
+            files = self.get_sorted_file_list(file_pattern)
 
-            self.copy_file(curr_img,local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
+            for curr_img in files:
+                with open(curr_img, 'rb') as photo:
+                    twitter.update_status_with_media(status=message, media=photo)
 
+                self.copy_file(curr_img, local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
 
-        print "... Tweet finished."
+        except TwythonError as e:
+            print "Error uploading files: ", e.returncode
+            success = False
+
+            raise
+
+        return success
