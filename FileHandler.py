@@ -183,7 +183,7 @@ class FileHandler(object):
 
             twitter = Twython(
                 consumer_key,
-                consume_secret,
+                consumer_secret,
                 access_token,
                 access_token_secret
             )
