@@ -187,7 +187,7 @@ class FileHandler(object):
                 access_token_secret
             )
 
-            message = '#CVconference'
+            message = '#CVconference with Team @RiosRoadRunners! #YouBelong #RiosRocks @ErinGassaway @LizLoether @CajonValleyUSD'
 
             # Get directories
             image_dir = self.get_local_file_dir()
