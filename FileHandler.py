@@ -207,7 +207,7 @@ class FileHandler(object):
                 self.copy_file(curr_img, local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
 
         except TwythonError as e:
-            print "Error uploading files: ", e.returncode
+            print "Error uploading files: ", e.TwythonError
             success = False
 
             raise
