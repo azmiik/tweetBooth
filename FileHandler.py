@@ -181,12 +181,8 @@ class FileHandler(object):
         try:
             success = True
 
-            twitter = Twython(
-                consumer_key,
-                consumer_secret,
-                access_token,
-                access_token_secret
-            )
+            twitter = Twython(consumer_key, consumer_secret,
+                              access_token, access_token_secret)
 
             message = '#CVconference with Team @RiosRoadRunners! #YouBelong #RiosRocks @ErinGassaway @LizLoether @CajonValleyUSD'
 
