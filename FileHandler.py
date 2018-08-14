@@ -8,6 +8,7 @@ import zipfile
 
 from twython import Twython
 from twython import TwythonError
+from twython import TwythonAuthError
 from datetime import datetime
 
 # Thanks http://stackoverflow.com/questions/26790916/python-3-backward-compatability-shlex-quote-vs-pipes-quote
@@ -182,7 +183,7 @@ class FileHandler(object):
 
             twitter = Twython(
                 consumer_key,
-                consumer_secret,
+                consume_secret,
                 access_token,
                 access_token_secret
             )
@@ -206,8 +207,14 @@ class FileHandler(object):
 
                 self.copy_file(curr_img, local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
 
+        except TwythonAuthError as e:
+            print "Auth Error: ", e
+            success = False
+
+            raise
+
         except TwythonError as e:
-            print "Error uploading files: ", e.TwythonError
+            print "Error uploading files: ", e
             success = False
 
             raise
