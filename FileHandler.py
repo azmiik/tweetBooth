@@ -200,7 +200,9 @@ class FileHandler(object):
 
             for curr_img in files:
                 with open(curr_img, 'rb') as photo:
-                    twitter.update_status_with_media(status=message, media=photo)
+                    response = twitter.upload_media(media=photo)
+                    twitter.update_status(status=message, media_ids=[response['media_id']])
+                    # twitter.update_status_with_media(status=message, media=photo)
 
                 self.copy_file(curr_img, local_archive_dir + "/%s.jpg" % datetime.now().isoformat())
 
